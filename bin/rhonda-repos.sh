@@ -6,7 +6,14 @@ set -euo pipefail
 # Interactive menu-driven tool for managing tracked GitHub repositories
 #========================================================================================================
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve symlink to get actual script location
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")/.." && pwd)"
 REPOS_DIR="${SCRIPT_DIR}/repos"
 
 #--------------------------------------------------------------------------------------------------------
