@@ -518,8 +518,14 @@ display_report_summary() {
     echo ""
     
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        open "${REPORT_FILE}"
-        echo "Report opened"
+        if open "${REPORT_FILE}" 2>/dev/null; then
+            print_success "Report opened"
+        elif open -a TextEdit "${REPORT_FILE}" 2>/dev/null; then
+            print_success "Report opened in TextEdit"
+        else
+            print_error "Could not open report"
+            echo "File saved at: ${REPORT_FILE}"
+        fi
     fi
     
     echo ""
