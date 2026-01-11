@@ -74,8 +74,13 @@ install_dependencies() {
         
         # Configure Git Credential Manager
         if command -v git-credential-manager &> /dev/null; then
-            git config --global credential.helper manager
-            print_success "Git Credential Manager configured"
+            # Check if credential helper is already configured
+            if ! git config --global --get credential.helper | grep -q "manager"; then
+                git config --global credential.helper manager
+                print_success "Git Credential Manager configured"
+            else
+                print_success "Git Credential Manager already configured"
+            fi
         fi
     else
         print_info "Skipping dependency installation"
