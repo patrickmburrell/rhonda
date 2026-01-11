@@ -12,4 +12,4 @@ brew "git"
 brew "jq"
 
 # Git Credential Manager for authenticating to client repositories
-brew "git-credential-manager"
+cask "git-credential-manager"
