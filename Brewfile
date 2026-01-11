@@ -10,3 +10,6 @@ brew "git"
 
 # JSON parser for processing gh command output
 brew "jq"
+
+# Git Credential Manager for authenticating to client repositories
+brew "git-credential-manager"

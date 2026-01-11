@@ -62,7 +62,7 @@ install_dependencies() {
         exit 1
     fi
     
-    echo "This will install: gh, git, and jq via Homebrew"
+    echo "This will install: gh, git, jq, and git-credential-manager via Homebrew"
     echo ""
     read -p "Continue with installation? (y/n) " -n 1 -r
     echo ""
@@ -71,6 +71,12 @@ install_dependencies() {
         cd "${SCRIPT_DIR}"
         brew bundle
         print_success "Dependencies installed"
+        
+        # Configure Git Credential Manager
+        if command -v git-credential-manager &> /dev/null; then
+            git config --global credential.helper manager
+            print_success "Git Credential Manager configured"
+        fi
     else
         print_info "Skipping dependency installation"
     fi
