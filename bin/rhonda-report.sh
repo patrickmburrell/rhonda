@@ -518,9 +518,9 @@ display_report_summary() {
     echo ""
     
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        if open "${REPORT_FILE}" 2>/dev/null; then
+        if open "${REPORT_FILE}"; then
             print_success "Report opened"
-        elif open -a TextEdit "${REPORT_FILE}" 2>/dev/null; then
+        elif open -a TextEdit "${REPORT_FILE}"; then
             print_success "Report opened in TextEdit"
         else
             print_error "Could not open report"
