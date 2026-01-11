@@ -107,8 +107,13 @@ setup_path() {
     
     local target_dir="/usr/local/bin"
     
-    # Create symlinks for easy access
-    if [[ -w "${target_dir}" ]] || sudo -n true 2>/dev/null; then
+    echo "To make Rhonda commands available from anywhere, we need to create"
+    echo "shortcuts in ${target_dir}. This requires administrator access."
+    echo ""
+    read -p "Install global commands? (y/n) " -n 1 -r
+    echo ""
+    
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "Creating command shortcuts..."
         echo ""
         
@@ -117,18 +122,26 @@ setup_path() {
         sudo rm -f "${target_dir}/rhonda-report" 2>/dev/null
         
         # Create new symlinks
-        sudo ln -sf "${BIN_DIR}/rhonda-repos.sh" "${target_dir}/rhonda-repos"
-        sudo ln -sf "${BIN_DIR}/rhonda-report.sh" "${target_dir}/rhonda-report"
-        
-        print_success "Rhonda commands installed"
-        echo ""
-        echo "You can now run from anywhere:"
-        echo "  rhonda-repos   - Manage repositories"
-        echo "  rhonda-report  - Generate reports"
-        echo ""
+        if sudo ln -sf "${BIN_DIR}/rhonda-repos.sh" "${target_dir}/rhonda-repos" && \
+           sudo ln -sf "${BIN_DIR}/rhonda-report.sh" "${target_dir}/rhonda-report"; then
+            print_success "Rhonda commands installed"
+            echo ""
+            echo "You can now run from anywhere:"
+            echo "  rhonda-repos   - Manage repositories"
+            echo "  rhonda-report  - Generate reports"
+            echo ""
+        else
+            print_error "Failed to create command shortcuts"
+            echo "You can still run from the rhonda directory:"
+            echo "  cd ~/rhonda"
+            echo "  ./bin/rhonda-repos.sh"
+            echo "  ./bin/rhonda-report.sh"
+            echo ""
+        fi
     else
-        print_info "Could not install global commands (needs sudo)"
-        echo "You can still run from the rhonda directory:"
+        print_info "Skipping global command installation"
+        echo ""
+        echo "You can run Rhonda from the rhonda directory:"
         echo "  cd ~/rhonda"
         echo "  ./bin/rhonda-repos.sh"
         echo "  ./bin/rhonda-report.sh"
