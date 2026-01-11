@@ -102,6 +102,42 @@ create_directories() {
 
 #--------------------------------------------------------------------------------------------------------
 
+setup_path() {
+    print_header "Setting Up Rhonda Commands"
+    
+    local target_dir="/usr/local/bin"
+    
+    # Create symlinks for easy access
+    if [[ -w "${target_dir}" ]] || sudo -n true 2>/dev/null; then
+        echo "Creating command shortcuts..."
+        echo ""
+        
+        # Remove old symlinks if they exist
+        sudo rm -f "${target_dir}/rhonda-repos" 2>/dev/null
+        sudo rm -f "${target_dir}/rhonda-report" 2>/dev/null
+        
+        # Create new symlinks
+        sudo ln -sf "${BIN_DIR}/rhonda-repos.sh" "${target_dir}/rhonda-repos"
+        sudo ln -sf "${BIN_DIR}/rhonda-report.sh" "${target_dir}/rhonda-report"
+        
+        print_success "Rhonda commands installed"
+        echo ""
+        echo "You can now run from anywhere:"
+        echo "  rhonda-repos   - Manage repositories"
+        echo "  rhonda-report  - Generate reports"
+        echo ""
+    else
+        print_info "Could not install global commands (needs sudo)"
+        echo "You can still run from the rhonda directory:"
+        echo "  cd ~/rhonda"
+        echo "  ./bin/rhonda-repos.sh"
+        echo "  ./bin/rhonda-report.sh"
+        echo ""
+    fi
+}
+
+#--------------------------------------------------------------------------------------------------------
+
 check_gh_auth() {
     print_header "Checking GitHub Authentication"
     
@@ -137,15 +173,15 @@ check_gh_auth() {
 print_usage() {
     print_header "Setup Complete!"
     
-    echo "Rhonda is ready to help you generate repository reports!"
+    echo "🎵 Rhonda is ready to help you generate repository reports! 🎵"
     echo ""
     echo "Next steps:"
     echo ""
     echo "1. Manage repositories:"
-    echo "   ${BIN_DIR}/rhonda-repos.sh"
+    echo "   rhonda-repos"
     echo ""
     echo "2. Generate reports:"
-    echo "   ${BIN_DIR}/rhonda-report.sh"
+    echo "   rhonda-report"
     echo ""
     echo "For detailed instructions, see:"
     echo "   ${SCRIPT_DIR}/USER-GUIDE.md"
@@ -166,6 +202,7 @@ main() {
     check_homebrew
     install_dependencies
     create_directories
+    setup_path
     check_gh_auth
     print_usage
 }
