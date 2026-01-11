@@ -497,7 +497,7 @@ display_report_summary() {
     
     local report_name=$(basename "${REPORT_FILE}")
     
-    print_success "Report saved: ${report_name}"
+    print_success "Report: ${report_name}"
     echo ""
     echo "Quick Summary:"
     echo "  Commits: ${TOTAL_COMMITS}"
@@ -505,10 +505,23 @@ display_report_summary() {
     echo "  PRs Merged: ${PR_MERGED}"
     echo "  Net Lines: ${NET_CHANGE:+}${NET_CHANGE}"
     echo ""
-    echo "Next steps:"
-    echo "  Copy to clipboard → cat \"${REPORT_FILE}\" | pbcopy"
-    echo "  Open in editor    → open \"${REPORT_FILE}\""
-    echo "  View in terminal  → cat \"${REPORT_FILE}\""
+    
+    # Automatically copy to clipboard
+    if cat "${REPORT_FILE}" | pbcopy 2>/dev/null; then
+        print_success "Report copied to clipboard - ready to paste!"
+    else
+        print_info "Report saved to: ${REPORT_FILE}"
+    fi
+    
+    echo ""
+    read -p "Open report in editor? (y/n) " -n 1 -r
+    echo ""
+    
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        open "${REPORT_FILE}"
+        echo "Report opened"
+    fi
+    
     echo ""
 }
 
