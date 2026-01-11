@@ -164,14 +164,35 @@ If you want to give her direct access to the repository:
 
 ### "Permission denied (publickey)"
 
-She needs to set up SSH keys for GitHub:
+You have several options:
+
+**Option 1: Use HTTPS with Git Credential Manager (Easiest)**
+
+Clone using HTTPS instead:
+```bash
+git clone https://github.com/YOUR_USERNAME/rhonda.git
+```
+
+Git Credential Manager (GCM) will handle authentication via browser.
+
+To install GCM on her MacBook:
+```bash
+brew install git-credential-manager
+git config --global credential.helper manager
+```
+
+**Option 2: Set up SSH keys**
+
 ```bash
 ssh-keygen -t ed25519 -C "her-email@example.com"
 cat ~/.ssh/id_ed25519.pub
 # Add this key to GitHub: Settings → SSH and GPG keys
 ```
 
-Or use HTTPS instead of SSH for the clone.
+Then clone with SSH:
+```bash
+git clone git@github.com:YOUR_USERNAME/rhonda.git
+```
 
 ### "gh: command not found" after setup
 
