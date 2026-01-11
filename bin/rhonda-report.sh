@@ -495,7 +495,9 @@ EOF
 display_report_summary() {
     print_header "Report Generated"
     
-    print_success "Report saved to: ${REPORT_FILE}"
+    local report_name=$(basename "${REPORT_FILE}")
+    
+    print_success "Report saved: ${report_name}"
     echo ""
     echo "Quick Summary:"
     echo "  Commits: ${TOTAL_COMMITS}"
@@ -503,10 +505,10 @@ display_report_summary() {
     echo "  PRs Merged: ${PR_MERGED}"
     echo "  Net Lines: ${NET_CHANGE:+}${NET_CHANGE}"
     echo ""
-    echo "You can:"
-    echo "  1. Open the report: open \"${REPORT_FILE}\""
-    echo "  2. Copy to clipboard: cat \"${REPORT_FILE}\" | pbcopy"
-    echo "  3. View in terminal: cat \"${REPORT_FILE}\""
+    echo "Next steps:"
+    echo "  Copy to clipboard → cat \"${REPORT_FILE}\" | pbcopy"
+    echo "  Open in editor    → open \"${REPORT_FILE}\""
+    echo "  View in terminal  → cat \"${REPORT_FILE}\""
     echo ""
 }
 
