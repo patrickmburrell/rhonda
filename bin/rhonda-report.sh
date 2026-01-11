@@ -436,7 +436,7 @@ EOFINNER
 EOF
 
     if [[ -n "${ACTIVE_BRANCHES}" ]]; then
-        echo -e "${ACTIVE_BRANCHES}" | head -n -1 >> "${report_file}"
+        echo -e "${ACTIVE_BRANCHES}" | sed '$d' >> "${report_file}"
     else
         echo "No branches updated in this period." >> "${report_file}"
     fi
@@ -448,7 +448,7 @@ EOF
 EOF
 
     if [[ -n "${STALE_BRANCHES}" ]]; then
-        echo -e "${STALE_BRANCHES}" | head -n -1 | head -n 10 >> "${report_file}"
+        echo -e "${STALE_BRANCHES}" | sed '$d' | head -n 10 >> "${report_file}"
         local stale_count=$(echo -e "${STALE_BRANCHES}" | grep -c '.' || echo "0")
         if [[ ${stale_count} -gt 10 ]]; then
             echo "... and $((stale_count - 10)) more stale branches" >> "${report_file}"
